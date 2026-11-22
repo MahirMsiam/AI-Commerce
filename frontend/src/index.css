@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* Bangla needs a font with Bengali glyphs. System fonts only: the demo runs offline (Plan.md §11). */
+@theme {
+  --font-sans: "Segoe UI", "Nirmala UI", "Noto Sans Bengali", "Vrinda", system-ui, sans-serif;
+}

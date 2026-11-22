@@ -1,0 +1,649 @@
+{
+ "top 5 products by revenue in chattogram last month": {
+  "answer_text": "ORSaline-N (৳ 8.9 lakh) is first, then SMC Plus Electrolyte Drink (৳ 7.2 lakh), Joya Sanitary Napkin Regular (৳ 6.9 lakh).",
+  "sql": "SELECT p.name AS product, ROUND(SUM(v.revenue_bdt)) AS revenue_bdt FROM v_sales v JOIN products p ON p.id=v.product_id JOIN distributors d ON d.id=v.distributor_id JOIN divisions dv ON dv.id=d.division_id WHERE dv.name_en='Chattogram' AND v.day BETWEEN '2026-10-01' AND '2026-10-31' GROUP BY 1 ORDER BY 2 DESC LIMIT 5",
+  "columns": [
+   "product",
+   "revenue_bdt"
+  ],
+  "rows": [
+   [
+    "ORSaline-N",
+    891250.0
+   ],
+   [
+    "SMC Plus Electrolyte Drink",
+    717943.0
+   ],
+   [
+    "Joya Sanitary Napkin Regular",
+    691714.0
+   ],
+   [
+    "Joya Ultra",
+    547486.0
+   ],
+   [
+    "Smile Baby Diaper M",
+    545371.0
+   ]
+  ],
+  "chart": {
+   "type": "bar",
+   "x": "product",
+   "y": "revenue_bdt"
+  },
+  "engine": "llm",
+  "lang": "en"
+ },
+ "which division had the highest sales this month": {
+  "answer_text": "Chattogram (৳ 63.7 lakh) is first.",
+  "sql": "SELECT dv.name_en AS division, ROUND(SUM(v.revenue_bdt)) AS revenue_bdt FROM v_sales v JOIN distributors d ON d.id=v.distributor_id JOIN divisions dv ON dv.id=d.division_id WHERE v.day BETWEEN '2026-11-01' AND '2026-11-22' GROUP BY dv.id ORDER BY revenue_bdt DESC LIMIT 1",
+  "columns": [
+   "division",
+   "revenue_bdt"
+  ],
+  "rows": [
+   [
+    "Chattogram",
+    6366079.0
+   ]
+  ],
+  "chart": {
+   "type": "number",
+   "x": "division",
+   "y": "revenue_bdt"
+  },
+  "engine": "llm",
+  "lang": "en"
+ },
+ "which distributors are above 80% of their credit limit": {
+  "answer_text": "SYL-02 (92%) is first, then BAR-03 (84%).",
+  "sql": "SELECT d.code, d.name, ROUND(100.0*r.outstanding_bdt/d.credit_limit_bdt,1) AS pct_of_limit FROM receivables r JOIN distributors d ON d.id=r.distributor_id WHERE r.outstanding_bdt > 0.8*d.credit_limit_bdt",
+  "columns": [
+   "code",
+   "name",
+   "pct_of_limit"
+  ],
+  "rows": [
+   [
+    "SYL-02",
+    "Sylhet Distributor 02",
+    92.0
+   ],
+   [
+    "BAR-03",
+    "Barishal Distributor 03",
+    84.0
+   ]
+  ],
+  "chart": {
+   "type": "bar",
+   "x": "code",
+   "y": "pct_of_limit"
+  },
+  "engine": "llm",
+  "lang": "en"
+ },
+ "show weekly revenue trend for the last 12 weeks": {
+  "answer_text": "Weekly revenue in the last 12 weeks: from ৳ 1.11 crore to ৳ 1.04 crore (-6% first to last week).",
+  "sql": "SELECT date(v.day, '-6 days', 'weekday 1') AS week, ROUND(SUM(v.revenue_bdt)) AS revenue_bdt\nFROM v_sales v\nJOIN distributors d ON d.id = v.distributor_id\nJOIN divisions dv ON dv.id = d.division_id\nJOIN products p ON p.id = v.product_id\nWHERE v.day BETWEEN '2026-08-31' AND '2026-11-22'\nGROUP BY 1\nORDER BY 1",
+  "columns": [
+   "week",
+   "revenue_bdt"
+  ],
+  "rows": [
+   [
+    "2026-08-31",
+    11068400.0
+   ],
+   [
+    "2026-09-07",
+    10454450.0
+   ],
+   [
+    "2026-09-14",
+    10481650.0
+   ],
+   [
+    "2026-09-21",
+    10523750.0
+   ],
+   [
+    "2026-09-28",
+    10581200.0
+   ],
+   [
+    "2026-10-05",
+    9691400.0
+   ],
+   [
+    "2026-10-12",
+    9773350.0
+   ],
+   [
+    "2026-10-19",
+    9808350.0
+   ],
+   [
+    "2026-10-26",
+    9809700.0
+   ],
+   [
+    "2026-11-02",
+    9827800.0
+   ],
+   [
+    "2026-11-09",
+    9872250.0
+   ],
+   [
+    "2026-11-16",
+    10352400.0
+   ]
+  ],
+  "chart": {
+   "type": "line",
+   "x": "week",
+   "y": "revenue_bdt"
+  },
+  "engine": "rules",
+  "lang": "en"
+ },
+ "গত মাসে কোন অঞ্চলে বিক্রি সবচেয়ে বেশি": {
+  "answer_text": "শীর্ষে ঢাকা (৳ ৮৯.৬ লাখ)।",
+  "sql": "SELECT dv.name_en AS division, ROUND(SUM(v.revenue_bdt)) AS revenue_bdt FROM v_sales v JOIN distributors d ON d.id=v.distributor_id JOIN divisions dv ON dv.id=d.division_id WHERE v.day BETWEEN '2026-10-01' AND '2026-10-31' GROUP BY 1 ORDER BY 2 DESC LIMIT 1",
+  "columns": [
+   "division",
+   "revenue_bdt"
+  ],
+  "rows": [
+   [
+    "Dhaka",
+    8963486.0
+   ]
+  ],
+  "chart": {
+   "type": "bar",
+   "x": "division",
+   "y": "revenue_bdt"
+  },
+  "engine": "llm",
+  "lang": "bn"
+ },
+ "চট্টগ্রামে শীর্ষ 5টি পণ্য কোনগুলো": {
+  "answer_text": "শীর্ষে জয়া স্যানিটারি ন্যাপকিন রেগুলার (৳ ৬.৩ লাখ); এরপর ওরস্যালাইন-এন (৳ ৬.১ লাখ), স্মাইল বেবি ডায়াপার এম (৳ ৪.৯ লাখ)।",
+  "sql": "SELECT p.name AS product, ROUND(SUM(v.revenue_bdt)) AS revenue_bdt FROM v_sales v JOIN products p ON p.id=v.product_id JOIN distributors d ON d.id=v.distributor_id JOIN divisions dv ON dv.id=d.division_id WHERE dv.name_en='Chattogram' AND v.day BETWEEN '2026-11-01' AND '2026-11-22' GROUP BY 1 ORDER BY 2 DESC LIMIT 5",
+  "columns": [
+   "product",
+   "revenue_bdt"
+  ],
+  "rows": [
+   [
+    "Joya Sanitary Napkin Regular",
+    628000.0
+   ],
+   [
+    "ORSaline-N",
+    612500.0
+   ],
+   [
+    "Smile Baby Diaper M",
+    492800.0
+   ],
+   [
+    "Joya Ultra",
+    488429.0
+   ],
+   [
+    "SMC Plus Electrolyte Drink",
+    479829.0
+   ]
+  ],
+  "chart": {
+   "type": "bar",
+   "x": "product",
+   "y": "revenue_bdt"
+  },
+  "engine": "llm",
+  "lang": "bn"
+ },
+ "কোন ডিস্ট্রিবিউটরদের বকেয়া সবচেয়ে বেশি": {
+  "answer_text": "সবচেয়ে বেশি বকেয়া Dhaka Distributor 03 (DHK-03)-এর: ৳ ১৬.০ লাখ (মেয়াদোত্তীর্ণ ৳ ৮১,০০০)।",
+  "sql": "SELECT d.code, d.name AS distributor, dv.name_en AS division, r.outstanding_bdt, r.overdue_bdt,\n       ROUND(100.0 * r.outstanding_bdt / d.credit_limit_bdt, 1) AS pct_of_limit\nFROM receivables r\nJOIN distributors d ON d.id = r.distributor_id\nJOIN divisions dv ON dv.id = d.division_id\n\nORDER BY r.outstanding_bdt DESC\nLIMIT 5",
+  "columns": [
+   "code",
+   "distributor",
+   "division",
+   "outstanding_bdt",
+   "overdue_bdt",
+   "pct_of_limit"
+  ],
+  "rows": [
+   [
+    "DHK-03",
+    "Dhaka Distributor 03",
+    "Dhaka",
+    1596000.0,
+    81000.0,
+    61.4
+   ],
+   [
+    "CTG-03",
+    "Chattogram Distributor 03",
+    "Chattogram",
+    1421000.0,
+    264000.0,
+    64.6
+   ],
+   [
+    "DHK-01",
+    "Dhaka Distributor 01",
+    "Dhaka",
+    1413000.0,
+    347000.0,
+    61.4
+   ],
+   [
+    "CTG-02",
+    "Chattogram Distributor 02",
+    "Chattogram",
+    1257000.0,
+    212000.0,
+    54.7
+   ],
+   [
+    "DHK-02",
+    "Dhaka Distributor 02",
+    "Dhaka",
+    880000.0,
+    185000.0,
+    40.0
+   ]
+  ],
+  "chart": {
+   "type": "bar",
+   "x": "code",
+   "y": "outstanding_bdt"
+  },
+  "engine": "rules",
+  "lang": "bn"
+ },
+ "agent:e1": {
+  "trace": [
+   {
+    "step": 1,
+    "type": "tool_result",
+    "name": "read_email",
+    "input": "e1",
+    "output": {
+     "from": "ctg-02@example.com",
+     "subject": "Order #1043 status and new requirement"
+    },
+    "ms": 0
+   },
+   {
+    "step": 2,
+    "type": "thought",
+    "name": "classify_intent",
+    "input": null,
+    "output": {
+     "intent": "order_status",
+     "order_ids": [
+      1043
+     ],
+     "products": [
+      {
+       "name": "SMC Plus Electrolyte Drink",
+       "cartons": 50
+      }
+     ],
+     "urgency": "high",
+     "summary_en": "Order #1043 status inquiry and request for additional SMC Plus stock",
+     "engine": "llm"
+    },
+    "ms": 3566
+   },
+   {
+    "step": 3,
+    "type": "tool_call",
+    "name": "get_order_status",
+    "input": [
+     1043
+    ],
+    "output": null,
+    "ms": 0
+   },
+   {
+    "step": 4,
+    "type": "tool_result",
+    "name": "get_order_status",
+    "input": null,
+    "output": {
+     "VBELN": "0000001043",
+     "KUNNR": "CTG-02",
+     "ERDAT": "2026-11-19",
+     "GBSTK": "Dispatched",
+     "NETWR": 158900.0,
+     "WAERK": "BDT",
+     "ITEMS": [
+      {
+       "POSNR": 10,
+       "MATNR": "SMC-008",
+       "ARKTX": "SMC Honey",
+       "KWMENG": 11,
+       "VRKME": "CAR"
+      },
+      {
+       "POSNR": 20,
+       "MATNR": "SMC-003",
+       "ARKTX": "SMC Plus Electrolyte Drink",
+       "KWMENG": 53,
+       "VRKME": "CAR"
+      },
+      {
+       "POSNR": 30,
+       "MATNR": "SMC-014",
+       "ARKTX": "Petroleum Jelly",
+       "KWMENG": 45,
+       "VRKME": "CAR"
+      }
+     ],
+     "friendly": {
+      "order_id": 1043,
+      "distributor": "Chattogram Distributor 02",
+      "created": "2026-11-19",
+      "status": "Dispatched",
+      "total_bdt": 158900.0,
+      "lines": [
+       "11 × SMC Honey",
+       "53 × SMC Plus Electrolyte Drink",
+       "45 × Petroleum Jelly"
+      ]
+     }
+    },
+    "ms": 1
+   },
+   {
+    "step": 5,
+    "type": "tool_call",
+    "name": "check_stock",
+    "input": [
+     "CTG-02",
+     "SMC Plus Electrolyte Drink"
+    ],
+    "output": null,
+    "ms": 0
+   },
+   {
+    "step": 6,
+    "type": "tool_result",
+    "name": "check_stock",
+    "input": null,
+    "output": {
+     "KUNNR": "CTG-02",
+     "MATNR": "SMC-003",
+     "MAKTX": "SMC Plus Electrolyte Drink",
+     "LABST": 115,
+     "MEINS": "CAR",
+     "friendly": {
+      "product": "SMC Plus Electrolyte Drink",
+      "product_bn": "এসএমসি প্লাস ইলেক্ট্রোলাইট ড্রিংক",
+      "product_id": 3,
+      "cartons_on_hand": 115,
+      "price_per_carton_bdt": 1800.0
+     }
+    },
+    "ms": 1
+   },
+   {
+    "step": 7,
+    "type": "tool_call",
+    "name": "get_credit_status",
+    "input": [
+     "CTG-02"
+    ],
+    "output": null,
+    "ms": 0
+   },
+   {
+    "step": 8,
+    "type": "tool_result",
+    "name": "get_credit_status",
+    "input": null,
+    "output": {
+     "KUNNR": "CTG-02",
+     "KLIMK": 2300000.0,
+     "SKFOR": 1257000.0,
+     "OVERDUE": 212000.0,
+     "AVAILABLE": 1043000.0,
+     "WAERS": "BDT",
+     "friendly": {
+      "distributor": "Chattogram Distributor 02",
+      "credit_limit_bdt": 2300000.0,
+      "outstanding_bdt": 1257000.0,
+      "overdue_bdt": 212000.0,
+      "available_bdt": 1043000.0,
+      "used_pct": 55,
+      "last_payment_date": "2026-11-02"
+     }
+    },
+    "ms": 0
+   },
+   {
+    "step": 9,
+    "type": "tool_call",
+    "name": "create_order_draft",
+    "input": {
+     "distributor_code": "CTG-02",
+     "lines": [
+      {
+       "product_id": 3,
+       "product": "SMC Plus Electrolyte Drink",
+       "cartons": 50,
+       "price_bdt": 1800.0
+      }
+     ]
+    },
+    "output": {
+     "proposed": true,
+     "status": "On hold",
+     "total_bdt": 90000.0,
+     "note": "created only after approval"
+    },
+    "ms": 0
+   },
+   {
+    "step": 10,
+    "type": "draft",
+    "name": "draft_reply",
+    "input": {
+     "to": "ctg-02@example.com",
+     "lang": "en"
+    },
+    "output": {
+     "to": "ctg-02@example.com",
+     "subject": "Re: Order #1043 status and new requirement",
+     "body": "Dear Chattogram Distributor 02,\n\nThank you for your email.\nOrder #1043 (placed on 2026-11-19) is currently dispatched. It has left our depot and should reach you within 1–2 days. Items: 11 × SMC Honey, 53 × SMC Plus Electrolyte Drink, 45 × Petroleum Jelly.\nRegarding your request for 50 cartons of SMC Plus Electrolyte Drink: your current stock is 115 cartons. We have prepared an order for 50 cartons (৳ 90,000), which our team will confirm shortly.\n\nBest regards,\nSMC EL Sales Support",
+     "lang": "en",
+     "writer": "llm",
+     "status": "draft"
+    },
+    "ms": 5016
+   },
+   {
+    "step": 11,
+    "type": "task",
+    "name": "create_task",
+    "input": null,
+    "output": {
+     "title": "Follow up order #1043 for CTG-02 + new request: 50 × SMC Plus Electrolyte Drink",
+     "description": "Order #1043 status inquiry and request for additional SMC Plus stock",
+     "assignee": "Area sales manager – Chattogram",
+     "due_date": "2026-11-23",
+     "priority": "high",
+     "source_email_id": "e1",
+     "status": "pending approval"
+    },
+    "ms": 0
+   }
+  ],
+  "intent": "order_status",
+  "draft": {
+   "to": "ctg-02@example.com",
+   "subject": "Re: Order #1043 status and new requirement",
+   "body": "Dear Chattogram Distributor 02,\n\nThank you for your email.\nOrder #1043 (placed on 2026-11-19) is currently dispatched. It has left our depot and should reach you within 1–2 days. Items: 11 × SMC Honey, 53 × SMC Plus Electrolyte Drink, 45 × Petroleum Jelly.\nRegarding your request for 50 cartons of SMC Plus Electrolyte Drink: your current stock is 115 cartons. We have prepared an order for 50 cartons (৳ 90,000), which our team will confirm shortly.\n\nBest regards,\nSMC EL Sales Support",
+   "lang": "en",
+   "writer": "llm"
+  },
+  "task": {
+   "title": "Follow up order #1043 for CTG-02 + new request: 50 × SMC Plus Electrolyte Drink",
+   "description": "Order #1043 status inquiry and request for additional SMC Plus stock",
+   "assignee": "Area sales manager – Chattogram",
+   "due_date": "2026-11-23",
+   "priority": "high",
+   "source_email_id": "e1"
+  },
+  "order": {
+   "distributor_code": "CTG-02",
+   "lines": [
+    {
+     "product_id": 3,
+     "product": "SMC Plus Electrolyte Drink",
+     "cartons": 50,
+     "price_bdt": 1800.0
+    }
+   ],
+   "total_bdt": 90000.0,
+   "status": "On hold"
+  }
+ },
+ "agent:e4": {
+  "trace": [
+   {
+    "step": 1,
+    "type": "tool_result",
+    "name": "read_email",
+    "input": "e4",
+    "output": {
+     "from": "khl-02@example.com",
+     "subject": "Damaged cartons in order #1300"
+    },
+    "ms": 0
+   },
+   {
+    "step": 2,
+    "type": "thought",
+    "name": "classify_intent",
+    "input": null,
+    "output": {
+     "intent": "complaint",
+     "order_ids": [
+      1300
+     ],
+     "products": [],
+     "urgency": "high",
+     "summary_en": "Damaged cartons in order #1300 need replacement",
+     "llm_intent": "order_status",
+     "engine": "llm"
+    },
+    "ms": 3765
+   },
+   {
+    "step": 3,
+    "type": "tool_call",
+    "name": "get_order_status",
+    "input": [
+     1300
+    ],
+    "output": null,
+    "ms": 0
+   },
+   {
+    "step": 4,
+    "type": "tool_result",
+    "name": "get_order_status",
+    "input": null,
+    "output": {
+     "VBELN": "0000001300",
+     "KUNNR": "KHL-02",
+     "ERDAT": "2026-10-14",
+     "GBSTK": "Delivered",
+     "NETWR": 36300.0,
+     "WAERK": "BDT",
+     "ITEMS": [
+      {
+       "POSNR": 10,
+       "MATNR": "SMC-007",
+       "ARKTX": "Taste Me Drink Powder",
+       "KWMENG": 33,
+       "VRKME": "CAR"
+      }
+     ],
+     "friendly": {
+      "order_id": 1300,
+      "distributor": "Khulna Distributor 02",
+      "created": "2026-10-14",
+      "status": "Delivered",
+      "total_bdt": 36300.0,
+      "lines": [
+       "33 × Taste Me Drink Powder"
+      ]
+     }
+    },
+    "ms": 1
+   },
+   {
+    "step": 5,
+    "type": "draft",
+    "name": "draft_reply",
+    "input": {
+     "to": "khl-02@example.com",
+     "lang": "en"
+    },
+    "output": {
+     "to": "khl-02@example.com",
+     "subject": "Re: Damaged cartons in order #1300",
+     "body": "Dear Khulna Distributor 02,\n\nThank you for your email.\nOrder #1300 (placed on 2026-10-14) has been delivered. Our records confirm this. We are truly sorry to hear that the cartons arrived damaged. We have already reported this issue to our Quality team, who will contact you within 2 working days to arrange a prompt replacement.\n\nBest regards,\nSMC EL Sales Support",
+     "lang": "en",
+     "writer": "llm",
+     "status": "draft"
+    },
+    "ms": 3948
+   },
+   {
+    "step": 6,
+    "type": "task",
+    "name": "create_task",
+    "input": null,
+    "output": {
+     "title": "Replace damaged cartons #1300 (KHL-02)",
+     "description": "Damaged cartons in order #1300 need replacement",
+     "assignee": "Quality team",
+     "due_date": "2026-11-23",
+     "priority": "high",
+     "source_email_id": "e4",
+     "status": "pending approval"
+    },
+    "ms": 0
+   }
+  ],
+  "intent": "complaint",
+  "draft": {
+   "to": "khl-02@example.com",
+   "subject": "Re: Damaged cartons in order #1300",
+   "body": "Dear Khulna Distributor 02,\n\nThank you for your email.\nOrder #1300 (placed on 2026-10-14) has been delivered. Our records confirm this. We are truly sorry to hear that the cartons arrived damaged. We have already reported this issue to our Quality team, who will contact you within 2 working days to arrange a prompt replacement.\n\nBest regards,\nSMC EL Sales Support",
+   "lang": "en",
+   "writer": "llm"
+  },
+  "task": {
+   "title": "Replace damaged cartons #1300 (KHL-02)",
+   "description": "Damaged cartons in order #1300 need replacement",
+   "assignee": "Quality team",
+   "due_date": "2026-11-23",
+   "priority": "high",
+   "source_email_id": "e4"
+  },
+  "order": null
+ }
+}
